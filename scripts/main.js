@@ -3,7 +3,7 @@ const ui = require("ui-lib/library");
 var dialog = null, button = null;
 var playerPicked = "";
 var reason = "";
-const defHeight = 50;
+const defHeight = 70;
 
 // Close dialog function
 function hideDialog(){

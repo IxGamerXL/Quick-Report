@@ -3,13 +3,31 @@ const ui = require("ui-lib/library");
 var dialog = null, button = null;
 var playerPicked = "";
 var reason = "";
+const defHeight = 50;
 
-// General report function
-function report() {
-	Call.sendChatMessage("/report "+Strings.stripColors(playerPicked.replace(/ /g,"/_"))+" "+reason);
-	Vars.ui.showInfoToast("Report sent! If the chat shows an\nerror, you may have to try again.", 6.5);
+// Close dialog function
+function hideDialog(){
 	dialog.hide();
 }
+
+// Resize UI function
+function resize(UiObj,sx,sy){
+	UiObj.width(sx);
+	UiObj.height(sy);
+}
+
+// General command function
+function sendCommand(co) {
+	Call.sendChatMessage("/"+co+" "+Strings.stripColors(playerPicked.replace(/ /g,"/_"))+" "+reason);
+	Vars.ui.showInfoToast("Done! If the chat shows an\nerror, you may have to try again.", 6.5);
+	dialog.hide();
+}
+
+// Child functions
+function report(){sendCommand("report")}
+function warn(){sendCommand("warn")}
+function kick(){sendCommand("kick")}
+function ban(){sendCommand("ban")}
 
 // Update the dialog with a new one.
 function updateDialog(){
@@ -42,7 +60,7 @@ ui.onLoad(() => {
 	r.add("Reason: ");
 	rField = r.field("", text => {
 		reason = text;
-	}).width(256).get();
+	}).width(325).get();
 
 	table.row();
 
@@ -51,17 +69,20 @@ ui.onLoad(() => {
 		dialog.hide();
 		Timer.schedule(updateDialog,0.05);
 	}
-	dialog.addCloseButton();
-	dialog.buttons.button("Report", Icon.admin, report).width(300);
+	resize(dialog.buttons.button("Close", Icon.left, hideDialog), 125, defHeight);
+	resize(dialog.buttons.button("Report", Icon.export, report), 150, defHeight);
+	if(Vars.player.admin){ // Buttons for admins exclusively.
+		resize(dialog.buttons.button("[yellow]Warn", Icon.add, warn), 120, defHeight);
+		resize(dialog.buttons.button("[scarlet]Kick", Icon.cancel, kick), 100, defHeight);
+		resize(dialog.buttons.button("[brick]Ban", Icon.hammer, ban), 100, defHeight);
+	}
 });
 
 }
 
-updateDialog();
-
 ui.addButton("quick-report", Items.blastCompound, () => {
-	if (!Vars.net.client()) {
-		Vars.ui.showInfoToast("how are you going to report bro", 5);
+	if (!Vars.net.client()) if(!Vars.player.admin){
+		Vars.ui.showInfoToast("I don't think you need the menu when\n you're by yourself.", 5);
 		return;
 	}
 	

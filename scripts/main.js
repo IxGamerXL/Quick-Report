@@ -49,7 +49,7 @@ ui.onLoad(() => {
 		dialog.hide();
 		Timer.schedule(updateDialog,0.05);
 	}
-	dialog.addCloseButton().width(300);
+	dialog.addCloseButton();
 	dialog.buttons.button("Report", Icon.admin, report).width(300);
 });
 

@@ -26,7 +26,9 @@ ui.onLoad(() => {
 		var i = 0;
 		plrs.each(plr => {
 
-			list.row()
+			if (i++ % 2 == 0) {
+				list.row();
+			}
 
 			list.button(plr.name, () => {
 				playerPicked = plr.name;

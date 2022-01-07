@@ -18,7 +18,7 @@ function resize(UiObj,sx,sy){
 
 // Translate Player function
 function translatePlr(){
-	return Strings.stripColors(playerPicked.replace(/ /g,"/_"))
+	return Strings.stripColors('"'+playerPicked+'"'/*.replace(/ /g,"/_")*/)
 }
 
 // General command with reason param
@@ -36,6 +36,7 @@ function sendCommand(co,params){
 	
 	try{
 		Call.sendChatMessage("/"+co+sp);
+		Log.info("[yellow]Quick Report -> "+co+sp);
 		Vars.ui.showInfoToast("Done! If the chat shows an error,\nyou may have to try again.", 6.5);
 		dialog.hide();
 	}catch(err){
